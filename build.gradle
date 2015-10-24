@@ -1,0 +1,47 @@
+apply plugin: 'idea'
+apply plugin: 'scala'
+apply plugin: 'java'
+
+task "createDirs" << {
+    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+repositories{
+    mavenCentral()
+    mavenLocal()
+}
+
+//create a single Jar with all dependencies
+
+jar {
+    zip64 true
+    manifest {
+        attributes "Main-Class": "example.kafkaWordCount"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+}
+
+dependencies{
+    ext.scalaVersion = '2.11'
+    compile "org.scala-lang:scala-library:${scalaVersion}.4"
+    compile "org.scala-lang:scala-compiler:${scalaVersion}.4"
+    compile "org.scala-lang:scala-reflect:${scalaVersion}.4"
+    compile "com.typesafe:config:1.3.0"
+	compile "com.typesafe.akka:akka-actor_${scalaVersion}:2.4.0"
+    compile "com.typesafe.akka:akka-testkit_${scalaVersion}:2.4.0"
+//    compile "com.typesafe.akka:akka-contrib_${scalaVersion}:2.3.14"
+    compile "org.apache.logging.log4j:log4j-core:2.3"
+    testCompile "org.scalatest:scalatest_${scalaVersion}:2.2.4"
+    testCompile "junit:junit:4.5"
+}
+
+
