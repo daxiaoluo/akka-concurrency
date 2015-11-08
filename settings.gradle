@@ -1,0 +1,11 @@
+include 'chapter08'
+
+rootProject.children.each { project ->
+    project.buildFileName = "build.gradle"
+    assert project.projectDir.isDirectory()
+    assert project.buildFile.exists()
+    assert project.buildFile.isFile()
+}
+include 'chapter07'
+include 'chapter09'
+

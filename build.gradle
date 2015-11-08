@@ -1,47 +1,83 @@
 apply plugin: 'idea'
-apply plugin: 'scala'
-apply plugin: 'java'
+apply from: "./libraries.gradle"
 
-task "createDirs" << {
-    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
-    sourceSets*.java.srcDirs*.each { it.mkdirs() }
-    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
-}
+defaultTasks 'build'
 
-repositories{
-    mavenCentral()
-    mavenLocal()
-}
-
-//create a single Jar with all dependencies
-
-jar {
-    zip64 true
-    manifest {
-        attributes "Main-Class": "example.kafkaWordCount"
-    }
-
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    } {
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        jcenter()
     }
 }
 
-dependencies{
-    ext.scalaVersion = '2.11'
-    compile "org.scala-lang:scala-library:${scalaVersion}.4"
-    compile "org.scala-lang:scala-compiler:${scalaVersion}.4"
-    compile "org.scala-lang:scala-reflect:${scalaVersion}.4"
-    compile "com.typesafe:config:1.3.0"
-	compile "com.typesafe.akka:akka-actor_${scalaVersion}:2.4.0"
-    compile "com.typesafe.akka:akka-testkit_${scalaVersion}:2.4.0"
-//    compile "com.typesafe.akka:akka-contrib_${scalaVersion}:2.3.14"
-    compile "org.apache.logging.log4j:log4j-core:2.3"
-    testCompile "org.scalatest:scalatest_${scalaVersion}:2.2.4"
-    testCompile "junit:junit:4.5"
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+ext {
+    expectedGradleVersion = '2.8'
+    targetVersion = '1.0-SNAPSHOT'
+}
+
+idea {
+    project {
+        jdkName = JavaVersion.VERSION_1_8
+        languageLevel = JavaVersion.VERSION_1_8
+        vcs = 'Git'
+    }
+    module {
+        name = "akka-concurrency"
+    }
+}
+
+subprojects { subProject ->
+    apply plugin: 'idea'
+    apply plugin: 'scala'
+    apply plugin: 'java'
+    defaultTasks 'build'
+
+    group = 'ms'
+    version = rootProject.targetVersion
+
+    dependencies {
+        compile(libraries.scalaLib)
+        compile(libraries.scalaRef)
+        compile(libraries.scalaCompiler)
+        compile(libraries.typesafeConfig)
+        compile(libraries.typesafeAkkaActor)
+        testCompile(libraries.typesafeAkkaTestkit)
+        testCompile(libraries.scalaTest)
+        testCompile(libraries.junit)
+    }
+
+    idea {
+        module {
+            jdkName = JavaVersion.VERSION_1_8
+
+            excludeDirs = [file(".gradle")]
+            excludeDirs += file("$buildDir/classes")
+            excludeDirs += file("$buildDir/bundles")
+            excludeDirs += file("$buildDir/packages")
+            excludeDirs += file("$buildDir/dependency-cache")
+            excludeDirs += file("$buildDir/libs")
+            excludeDirs += file("$buildDir/reports")
+            excludeDirs += file("$buildDir/test-results")
+            excludeDirs += file("$buildDir/tmp")
+            excludeDirs += file("$buildDir/matrix")
+            excludeDirs += file("$buildDir/resources")
+
+            downloadSources = true
+        }
+    }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = expectedGradleVersion
 }
 
 
