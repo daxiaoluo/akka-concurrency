@@ -94,6 +94,7 @@ class Pilot(plane: ActorRef, autopilot: ActorRef, heading: ActorRef, altimeter: 
 
   def sober(copilot: ActorRef, flyer: ActorSelection): Receive = {
     case FeelingSober =>
+      log.info("We're already sober")
     case FeelingTipsy =>
       becomeTipsy(copilot, flyer)
     case FeelingLikeZaphod =>
@@ -104,6 +105,7 @@ class Pilot(plane: ActorRef, autopilot: ActorRef, heading: ActorRef, altimeter: 
     case FeelingSober =>
       becomeSober(copilot, flyer)
     case FeelingTipsy =>
+      log.info("We're already tipsy")
     case FeelingLikeZaphod =>
       becomeZaphod(copilot, flyer)
   }
@@ -114,6 +116,7 @@ class Pilot(plane: ActorRef, autopilot: ActorRef, heading: ActorRef, altimeter: 
     case FeelingTipsy =>
       becomeTipsy(copilot, flyer)
     case FeelingLikeZaphod =>
+      log.info("We're already zaphod")
   }
 
   def becomeSober(copilot: ActorRef, flyer: ActorSelection) = {

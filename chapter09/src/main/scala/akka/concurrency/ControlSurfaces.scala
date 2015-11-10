@@ -19,12 +19,7 @@ class ControlSurfaces(plane: ActorRef, altimeter: ActorRef, heading: ActorRef) e
   import ControlSurfaces._
   import HeadingIndicator._
 
-  override def receive: Receive = {
-    case StickBack(amount) =>
-      altimeter ! RateChange(amount)
-    case StickForward(amount) =>
-      altimeter ! RateChange(-1 * amount)
-  }
+  override def receive: Receive = controlledBy(context.system.deadLetters)
 
   def controlledBy(somePilot: ActorRef): Receive = {
     case StickBack(amount) if sender() == somePilot =>

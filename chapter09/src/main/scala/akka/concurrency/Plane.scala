@@ -19,7 +19,7 @@ object Plane {
 
   case object LostControl
 
-  case class Controls(controlSurfaces: ActorRef)
+  case class Controls(controls: ActorRef)
 
 
   def apply() = new Plane with AltimeterProvider with PilotProvider with LeadFlightAttendantProvider with HeadingIndicatorProvider
@@ -33,6 +33,7 @@ class Plane extends Actor with ActorLogging {
   import Altimeter._
   import IsolatedLifeCycleSupervisor._
   import Plane._
+  import HeadingIndicator._
 
   implicit val timeout = Timeout(5.seconds)
 
@@ -49,6 +50,8 @@ class Plane extends Actor with ActorLogging {
   override def receive: Receive = {
     case AltitudeUpdate(altitude) =>
       log.info(s"Altitude is now: $altitude")
+    case HeadingUpdate(heading) =>
+      log.info(s"heading is now: $heading")
     case GiveMeControl =>
       log.info("Plane giving control.")
       sender ! actorForControls("ControlSurfaces")
