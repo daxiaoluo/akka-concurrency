@@ -100,9 +100,10 @@ class Plane extends Actor with ActorLogging {
     val control = actorForControls("ControlSurfaces")
     val autopilot = actorForControls("AutoPilot")
     val altimeter = actorForControls("Altimeter")
+    val heading = actorForControls("HeadingIndicator")
     val people = context.actorOf(Props(new IsolatedStopSupervisor with OneForOneStrategyFactory {
       def childStarter() {
-        context.actorOf(Props(newPilot(plane, autopilot, control, altimeter)), pilotName)
+        context.actorOf(Props(newPilot(plane, autopilot, heading, altimeter)), pilotName)
         context.actorOf(Props(newCoPilot(plane, autopilot, altimeter)), copilotName)
       }
     }), "Pilots")
