@@ -1,13 +1,13 @@
 ext {
     scalaVersion = '2.11'
     libraries = [
-            scalaLib           : "org.scala-lang:scala-library:${scalaVersion}.+",
-            scalaCompiler      : "org.scala-lang:scala-compiler:${scalaVersion}.+",
-            scalaRef           : "org.scala-lang:scala-reflect:${scalaVersion}.+",
+            scalaLib           : "org.scala-lang:scala-library:${scalaVersion}.4",
+            scalaCompiler      : "org.scala-lang:scala-compiler:${scalaVersion}.4",
+            scalaRef           : "org.scala-lang:scala-reflect:${scalaVersion}.4",
             typesafeConfig     : "com.typesafe:config:1.3.0",
             typesafeAkkaActor  : "com.typesafe.akka:akka-actor_${scalaVersion}:2.4.0",
             typesafeAkkaTestkit: "com.typesafe.akka:akka-testkit_${scalaVersion}:2.4.0",
-            scalaTest          : "org.scalatest:scalatest_${scalaVersion}:+",
+            scalaTest          : "org.scalatest:scalatest_${scalaVersion}:2.2.4",
             log4jCore          : "org.apache.logging.log4j:log4j-core:2.3",
             junit              : "junit:junit:4.5"
     ]

@@ -3,8 +3,9 @@ package akka.concurrency
 import akka.actor.{Props, ActorSystem, Actor, ActorRef}
 import akka.testkit.{ImplicitSender, TestKit}
 import com.typesafe.config.ConfigFactory
-import org.scalatest.{MustMatchers, BeforeAndAfterAll, BeforeAndAfter, WordSpecLike}
+import org.scalatest.{MustMatchers, BeforeAndAfterAll, WordSpecLike}
 import scala.concurrent.duration._
+
 /**
  * Created by taoluo on 11/12/15.
  */

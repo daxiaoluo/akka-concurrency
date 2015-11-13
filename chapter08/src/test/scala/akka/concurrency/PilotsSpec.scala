@@ -47,7 +47,6 @@ class PilotsSpec extends TestKit(ActorSystem("PilotsSpec",
   import Plane._
 
   def nilActor = system.actorOf(Props[NilActor])
-  TestPilots
   val pilotPath = s"/user//$pilotName"
   val copilotPath = s"/user/TestPilots/$copilotName"
 
